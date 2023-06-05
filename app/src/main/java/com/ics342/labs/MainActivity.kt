@@ -8,12 +8,28 @@ import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var editText: EditText
+    private lateinit var button: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        button = findViewById(R.id.button)
+        editText = findViewById(R.id.editText)
+        button.setOnClickListener{
+            handleButtonClick()
+        }
+
     }
 
     private fun handleButtonClick() {
+        val text = editText.text.toString()
+        if(text.isEmpty()){
+            showTextInAlert(text)
+        }
+        else{
+            showErrorAlert()
+        }
+
         /** Implement the functionality to display the alert here. **/
     }
 
@@ -37,3 +53,4 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 }
+
