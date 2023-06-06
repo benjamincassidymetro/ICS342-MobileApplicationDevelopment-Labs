@@ -7,10 +7,23 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var editText: EditText
+    private lateinit var button: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        editText = findViewById(R.id.editText)
+        button = findViewById(R.id.button)
+
+        button.setOnClickListener {
+            val enteredText = editText.text.toString()
+
+            if (enteredText.isEmpty()) {
+                showErrorAlert()
+            } else {
+                showTextInAlert(enteredText)
+            }
+        }
     }
 
     private fun handleButtonClick() {
@@ -37,3 +50,4 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 }
+
