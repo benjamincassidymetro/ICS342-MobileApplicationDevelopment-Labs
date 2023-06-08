@@ -3,15 +3,25 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
+
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -42,7 +52,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             LabsTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     Greeting("Android")
                 }
             }
@@ -61,11 +74,45 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun DataItemView(dataItem: DataItem) {
     /* Create the view for the data item her. */
+
+    //Creates a space for "Hello Android!".
+    Spacer(modifier = Modifier.size(20.dp))
+
+    Row {
+        //Gets the dataItem ID and converts it to a string
+        Text(text = dataItem.id.toString())
+        Spacer(modifier = Modifier.size(15.dp))
+
+        Column {
+
+            //Gets the dataItem name
+            Text(
+                text = dataItem.name,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            //Gets the dataItem description
+            Text(
+                text = dataItem.description,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = 3.sp,
+                )
+        }
+
+    }
+
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
+
+    //Creates a function for a column for dataItems.
+    LazyColumn {
+        items(dataItems) { DataItem ->
+            DataItemView(DataItem)
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -73,5 +120,6 @@ fun DataItemList(dataItems: List<DataItem>) {
 fun GreetingPreview() {
     LabsTheme {
         Greeting("Android")
+        DataItemList(dataItems = dataItems)
     }
 }
