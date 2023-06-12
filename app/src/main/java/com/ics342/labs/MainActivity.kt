@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
+import androidx.compose.foundation.lazy.items
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Greeting("Android")
+                    DataItemList(dataItems)
                 }
             }
         }
@@ -61,11 +63,31 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun DataItemView(dataItem: DataItem) {
     /* Create the view for the data item her. */
+    Row (verticalAlignment = Alignment.CenterVertically){
+        Image(
+            painter = dataItem.id,
+            contentDescription = "Data Id",
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Column {
+            Text(dataItem.name)
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(dataItem.description)
+        }
+    }
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
+    LazyColumn {
+        items(dataItems){ dataItem ->
+            DataItemView(dataItem = dataItem )
+        }
+    }
 }
 
 @Preview(showBackground = true)
