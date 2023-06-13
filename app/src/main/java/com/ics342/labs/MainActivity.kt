@@ -1,9 +1,14 @@
 package com.ics342.labs
 
 import android.os.Bundle
+import android.view.Display
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,7 +48,7 @@ class MainActivity : ComponentActivity() {
             LabsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
+                   DataItemList(dataItems = dataItems)
                 }
             }
         }
@@ -61,11 +66,21 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun DataItemView(dataItem: DataItem) {
     /* Create the view for the data item her. */
+    Column {
+        Text(text = "ID: ${dataItem.id}")
+        Text(text = "Name: ${dataItem.name}")
+        Text(text = "Description: ${dataItem.description}")
+    }
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
+    LazyColumn{
+        items(dataItems) { dataItem ->
+            DataItemView(dataItem = dataItem)
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -75,3 +90,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
