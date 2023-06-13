@@ -3,15 +3,29 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
+
+
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -43,7 +57,7 @@ class MainActivity : ComponentActivity() {
             LabsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
+                    DataItemList(dataItems = dataItems)
                 }
             }
         }
@@ -58,20 +72,77 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+
+
+
+
 @Composable
 fun DataItemView(dataItem: DataItem) {
-    /* Create the view for the data item her. */
+    Column {
+        // Display ID on the left
+        Text(
+            text = "ID: " + dataItem.id.toString(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 5.sp, // Set the font size here
+            modifier = Modifier.padding(end = 8.dp)
+        )
+
+        Column (modifier = Modifier.padding(start = 15.dp, top = 3.dp))
+
+        {
+            // Display Name above the Description
+
+
+            Text(
+                text = "Name: " + dataItem.name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 5.sp
+
+            )
+
+            // Display Description below the Name
+            Text(
+                text = "Description: " + dataItem.description,
+                fontSize = 5.sp
+
+            )
+        }
+    }
+
+
 }
+
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
+    Spacer(modifier =  Modifier.size(8.dp))
+    Column{
+        for(DataItem in dataItems) {
+            DataItemView(dataItem = DataItem)
+            Spacer(modifier =  Modifier.size(0.dp))
+
+        }
+
+    }
+
+
+
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    LabsTheme {
+//        DataItemsList(dataItems = dataItems )
+//
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun PrevList() {
     LabsTheme {
-        Greeting("Android")
+        DataItemList(dataItems = dataItems)
     }
 }
