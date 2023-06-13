@@ -3,13 +3,23 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
 
@@ -43,8 +53,7 @@ class MainActivity : ComponentActivity() {
             LabsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
+                    DataItemList(dataItems = dataItems)                }
             }
         }
     }
@@ -60,12 +69,38 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun DataItemView(dataItem: DataItem) {
-    /* Create the view for the data item her. */
+    Row(modifier = Modifier.padding()) {
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "ID: ${dataItem.id}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 8.sp
+
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Column(modifier = Modifier.padding(start = 20.dp, top = 0.dp)) {
+            Text(
+                text = "Name: ${dataItem.name}",
+                fontSize = 6.sp
+            )
+            Text(
+                text = "Description: ${dataItem.description}",
+                fontSize = 6.sp
+            )
+        }
+    }
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
-    /* Create the list here. This function will call DataItemView() */
+    /*  the list here. This function will call DataItemView() */
+    Column {
+        for (item in dataItems) {
+            DataItemView(dataItem = item)
+            Spacer(modifier = Modifier.height(0.dp))
+        }
+    }
+
 }
 
 @Preview(showBackground = true)
@@ -73,5 +108,13 @@ fun DataItemList(dataItems: List<DataItem>) {
 fun GreetingPreview() {
     LabsTheme {
         Greeting("Android")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ItemPrev(){
+    LabsTheme {
+        DataItemList(dataItems = dataItems)
     }
 }
