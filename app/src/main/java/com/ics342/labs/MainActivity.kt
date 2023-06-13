@@ -3,15 +3,22 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
+
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -36,6 +43,8 @@ private val dataItems = listOf(
     DataItem(20, "Item 20", "Description 20"),
 )
 
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +67,43 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+
 @Composable
 fun DataItemView(dataItem: DataItem) {
     /* Create the view for the data item her. */
+    Text(
+        text = "ID: ${dataItem.id}",
+        modifier = Modifier.padding(start = 23.dp),
+
+    )
+    Column(modifier = Modifier.padding(start = 72.dp)) {
+        Text(
+            text = dataItem.name,
+            modifier = Modifier.padding(top = 14.dp)
+        )
+        Text(
+            text = dataItem.description,
+            modifier = Modifier.padding(top = 12.dp)
+        )
+    }
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(dataItems) { dataItem ->
+            DataItemView(dataItem = dataItem)
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     LabsTheme {
-        Greeting("Android")
+        DataItemList(dataItems = dataItems)
     }
 }
+
