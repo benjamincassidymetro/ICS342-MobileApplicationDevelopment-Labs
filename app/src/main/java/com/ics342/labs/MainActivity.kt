@@ -3,28 +3,32 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
+
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -59,7 +63,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //Greeting("Android")
                     DataItemList(dataItems = dataItems)
                 }
             }
@@ -68,54 +71,39 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DataItemView(dataItem: DataItem) {
-    /* Create the view for the data item her. */
-
+fun AlertDialogView(dataItem: DataItem){
+    var showDialog by remember { mutableStateOf(false) }
     Row(
         horizontalArrangement = Arrangement.Start,
-        modifier = Modifier.height(56.dp).fillMaxWidth(),
+        modifier = Modifier
+            .height(56.dp)
+            .fillMaxWidth()
+            .clickable(onClick = {
+                showDialog = true
+            })
     ){
         Text(
             text = "${dataItem.id}",
             fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.width(25.dp))
-        Text(
-            text = dataItem.name,
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
     }
-
-    Text(
-        text = dataItem.description,
-        fontSize = 20.sp,
-        textAlign = TextAlign.Left,
-        modifier = Modifier.fillMaxWidth()
-    )
-    Text(
-        text = "",
-        fontSize = 20.sp
-    )
-
+    if(showDialog){
+        AlertDialog(
+            onDismissRequest = { showDialog = false},
+            title = {Text(text = "${dataItem.name}")},
+            confirmButton = { Button( onClick = {showDialog = false}){
+                Text("Okay") }},
+            text = {Text(text = "${dataItem.description}")})
+    }
 }
 
 @Composable
 fun DataItemList(dataItems: List<DataItem>) {
     /* Create the list here. This function will call DataItemView() */
-
     LazyColumn(){
         items(items = dataItems){
-            DataItemView(dataItem = it)}
+            AlertDialogView(dataItem = it)}
         }
 }
 
@@ -123,6 +111,6 @@ fun DataItemList(dataItems: List<DataItem>) {
 @Composable
 fun GreetingPreview() {
     LabsTheme {
-        Greeting("Android")
+        DataItemList(dataItems = dataItems)
     }
 }
