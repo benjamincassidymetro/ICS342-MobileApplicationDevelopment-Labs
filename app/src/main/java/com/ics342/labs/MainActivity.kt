@@ -1,7 +1,7 @@
 package com.ics342.labs
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -11,23 +11,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.ics342.labs.data.DataItem
-import com.ics342.labs.ui.theme.LabsTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import com.ics342.labs.data.DataItem
+import com.ics342.labs.ui.theme.LabsTheme
 
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
@@ -75,25 +75,42 @@ fun DataListScreen(items: List<DataItem>){
     var dataItem by remember { mutableStateOf<DataItem?>(null) }
     DataItemList(items) { dataItem = it }
     dataItem?.let{
+        showDialog=true
+        // if person clicks on item,
         if (showDialog) {
             AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = {"Hello World!"},
-                text = {"Hello World!"},
-                confirmButton = { showDialog = false },
-                dismissButton = { showDialog = false },
+                onDismissRequest = {  },
+                title = { Text("${it.name}") },
+                text = { Text("${it.description}") },
+                confirmButton = {
+                    Log.d("before", "showDialog value: $showDialog")
+                    Button(onClick = { showDialog = false } ) {
+                        Text("Agree")
+                    }
+                    Log.d("after", "showDialog value: $showDialog")
+                },
+                dismissButton = {
+                    Button(onClick = { showDialog = false }) {
+                        Text("Disagree")
+                    }
+                },
             )
+            Log.d("BEFORE", "showDialog value: $dataItem")
+            Log.d("AFTER", "showDialog value: $dataItem")
+
         }
-        else dataItem = null
-
     }
-
+    dataItem=null
 }
 
-@Composable
-fun AlertDialog(){
 
-}
+
+/*
+=================
+id    name
+      description
+=================
+ */
 @Composable
 fun DataItemView(dataItem: DataItem) {
     Row{
@@ -120,6 +137,17 @@ fun DataItemView(dataItem: DataItem) {
     }
 }
 
+/*
+==============
+dataItemView()
+--------------
+dataItemView()
+--------------
+dataItemView()
+==============
+ */
+
+// this code enables each item to be clickable and puts the view in each column
 @Composable
 fun DataItemList(
     dataItems: List<DataItem>,
