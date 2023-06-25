@@ -79,24 +79,24 @@ fun DataListScreen(items: List<DataItem>){
         // if person clicks on item,
         if (showDialog) {
             AlertDialog(
-                onDismissRequest = {  },
+                // close if user clicks outside the box
+                onDismissRequest = { showDialog = false },
                 title = { Text("${it.name}") },
                 text = { Text("${it.description}") },
-                confirmButton = {
-                    Log.d("before", "showDialog value: $showDialog")
-                    Button(onClick = { showDialog = false } ) {
-                        Text("Agree")
-                    }
-                    Log.d("after", "showDialog value: $showDialog")
-                },
+                // close if user presses disagree button
                 dismissButton = {
                     Button(onClick = { showDialog = false }) {
                         Text("Disagree")
                     }
                 },
+                // closes if user presses agree button
+                confirmButton = {
+                    Button(onClick = { showDialog = false } ) {
+                        Text("Agree")
+                    }
+                },
             )
-            Log.d("BEFORE", "showDialog value: $dataItem")
-            Log.d("AFTER", "showDialog value: $dataItem")
+
 
         }
     }
