@@ -29,28 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
 
-private val dataItems = listOf(
-    DataItem(1, "Item 1", "Description 1"),
-    DataItem(2, "Item 2", "Description 2"),
-    DataItem(3, "Item 3", "Description 3"),
-    DataItem(4, "Item 4", "Description 4"),
-    DataItem(5, "Item 5", "Description 5"),
-    DataItem(6, "Item 6", "Description 6"),
-    DataItem(7, "Item 7", "Description 7"),
-    DataItem(8, "Item 8", "Description 8"),
-    DataItem(9, "Item 9", "Description 9"),
-    DataItem(10, "Item 10", "Description 10"),
-    DataItem(11, "Item 11", "Description 11"),
-    DataItem(12, "Item 12", "Description 12"),
-    DataItem(13, "Item 13", "Description 13"),
-    DataItem(14, "Item 14", "Description 14"),
-    DataItem(15, "Item 15", "Description 15"),
-    DataItem(16, "Item 16", "Description 16"),
-    DataItem(17, "Item 17", "Description 17"),
-    DataItem(18, "Item 18", "Description 18"),
-    DataItem(19, "Item 19", "Description 19"),
-    DataItem(20, "Item 20", "Description 20"),
-)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DataListScreen(dataItems)
+                    Text("Hello World")
                 }
             }
         }
@@ -70,107 +48,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DataListScreen(items: List<DataItem>){
-    var showDialog by remember { mutableStateOf(false) }
-    var dataItem by remember { mutableStateOf<DataItem?>(null) }
-    DataItemList(items) { dataItem = it }
-    dataItem?.let{
-        showDialog=true
-        // if person clicks on item,
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = {  },
-                title = { Text("${it.name}") },
-                text = { Text("${it.description}") },
-                confirmButton = {
-                    Log.d("before", "showDialog value: $showDialog")
-                    Button(onClick = { showDialog = false } ) {
-                        Text("Agree")
-                    }
-                    Log.d("after", "showDialog value: $showDialog")
-                },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("Disagree")
-                    }
-                },
-            )
-            Log.d("BEFORE", "showDialog value: $dataItem")
-            Log.d("AFTER", "showDialog value: $dataItem")
-
-        }
-    }
-    dataItem=null
-}
-
-
-
-/*
-=================
-id    name
-      description
-=================
- */
-@Composable
-fun DataItemView(dataItem: DataItem) {
-    Row{
-        Text(
-            text = dataItem.id.toString(),
-            style = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Column{
-            Text(text = dataItem.name,
-                 style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                 )
-            )
-            Text(text = dataItem.description,
-                 style = TextStyle(
-                    fontSize =10.sp,
-                 )
-            )
-        }
+fun DataItemList() {
+    Column{
+        Text("My Weather App")
+        Text("Saint Paul, MN")
+        Text("72")
+        Text("Feels like 78")
+        // image()
+        Text("Low 65")
+        Text("High 80")
+        Text("Humidity 100%")
+        Text("Pressure 1023 hPa")
     }
 }
 
-/*
-==============
-dataItemView()
---------------
-dataItemView()
---------------
-dataItemView()
-==============
- */
-
-// this code enables each item to be clickable and puts the view in each column
-@Composable
-fun DataItemList(
-    dataItems: List<DataItem>,
-    dataItemClicked: (DataItem) -> Unit
-) {
-    LazyColumn{
-        items(dataItems){ dataItem ->
-           Box(
-              modifier = Modifier.clickable {
-                  dataItemClicked(dataItem)
-              }
-           ) {
-               DataItemView(dataItem)
-           }
-        }
-    }
-}
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     LabsTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            DataListScreen(dataItems)
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            DataItemList()
         }
     }
 }
