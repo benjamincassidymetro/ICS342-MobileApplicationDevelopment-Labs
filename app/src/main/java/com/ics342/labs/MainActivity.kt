@@ -73,9 +73,10 @@ class MainActivity : ComponentActivity() {
 fun DataListScreen(items: List<DataItem>){
     var showDialog by remember { mutableStateOf(false) }
     var dataItem by remember { mutableStateOf<DataItem?>(null) }
-    DataItemList(items) { dataItem = it }
+    // when selected, it focuses on the specific item and sets showDialog to true
+    DataItemList(items) { dataItem = it;
+                          showDialog=true }
     dataItem?.let{
-        showDialog=true
         // if person clicks on item,
         if (showDialog) {
             AlertDialog(
@@ -96,11 +97,8 @@ fun DataListScreen(items: List<DataItem>){
                     }
                 },
             )
-
-
         }
     }
-    dataItem=null
 }
 
 
