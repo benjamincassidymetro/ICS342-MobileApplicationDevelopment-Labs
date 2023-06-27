@@ -3,13 +3,16 @@ package com.ics342.labs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -45,10 +48,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val (selectedItem, setSelectedItem) = remember { mutableStateOf<DataItem?>(null) }
+            val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
+
+            if (showDialog && selectedItem != null) {
+                AlertDialog(
+                    onDismissRequest = { setShowDialog(false) },
+                    title = { Text(selectedItem!!.name) }, // Use selectedItem safely as we've already checked it's not null
+                    text = { Text(selectedItem!!.description) }, // Use selectedItem safely as we've already checked it's not null
+                    confirmButton = {
+                        Button(onClick = { setShowDialog(false) }) {
+                            Text("Okay")
+                        }
+                    }
+                )
+            }
+
             LabsTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    DataItemList(dataItems)
+                    DataItemList(dataItems) { dataItem ->
+                        setSelectedItem(dataItem)
+                        setShowDialog(true)
+                    }
                 }
             }
         }
@@ -56,16 +77,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DataItemView(dataItem: DataItem) {
-    Row(verticalAlignment = Alignment.Top) {
+fun DataItemView(dataItem: DataItem, onItemClicked: (DataItem) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = Modifier.clickable { onItemClicked(dataItem) }
+    ) {
         Text(
             text = dataItem.id.toString(),
             modifier = Modifier.weight(1f),
@@ -86,10 +102,10 @@ fun DataItemView(dataItem: DataItem) {
 }
 
 @Composable
-fun DataItemList(dataItems: List<DataItem>) {
+fun DataItemList(dataItems: List<DataItem>, onItemClicked: (DataItem) -> Unit) {
     LazyColumn {
         items(dataItems) { dataItem ->
-            DataItemView(dataItem)
+            DataItemView(dataItem, onItemClicked)
         }
     }
 }
@@ -98,7 +114,6 @@ fun DataItemList(dataItems: List<DataItem>) {
 @Composable
 fun PreviewDataItemList() {
     LabsTheme {
-        DataItemList(dataItems)
+        DataItemList(dataItems) {}
     }
 }
-
