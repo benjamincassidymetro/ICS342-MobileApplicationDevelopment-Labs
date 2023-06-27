@@ -27,27 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.ics342.labs.ui.theme.LabsTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var textViewTitle: TextView
-    private lateinit var textViewCityName: TextView
-    private lateinit var textViewDegree: TextView
-    private lateinit var textViewText: TextView
-    private lateinit var textViewLow: TextView
-    private lateinit var textViewHigh: TextView
-    private lateinit var textViewHumidity: TextView
-    private lateinit var textViewPressure: TextView
-    private lateinit var imageViewWeather: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        textViewTitle = findViewById(R.id.textViewTitle)
-        textViewCityName = findViewById(R.id.textViewCityName)
-        textViewDegree = findViewById(R.id.textViewDegree)
-        textViewText = findViewById(R.id.textViewText)
-        textViewLow = findViewById(R.id.textViewLow)
-        textViewHigh = findViewById(R.id.textViewHigh)
-        textViewHumidity = findViewById(R.id.textViewHumidity)
-        textViewPressure = findViewById(R.id.textViewPressure)
-        imageViewWeather = findViewById(R.id.imageViewWeather)
     }
 }
