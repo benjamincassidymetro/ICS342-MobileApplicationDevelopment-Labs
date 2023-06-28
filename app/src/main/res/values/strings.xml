@@ -3,8 +3,8 @@
     <string name="stateCity">St. Paul, MN</string>
     <string name="degree">72º</string>
     <string name="text">Feels like 78º</string>
-    <string name="lowTemp">Low 65º</string>
-    <string name="highTemp">High 80º</string>
+    <string name="lowDegree">Low 65º</string>
+    <string name="highDegree">High 80º</string>
     <string name="humidity">Humidity 100%</string>
     <string name="pressure">Pressure 1023 hPa</string>
 </resources>
