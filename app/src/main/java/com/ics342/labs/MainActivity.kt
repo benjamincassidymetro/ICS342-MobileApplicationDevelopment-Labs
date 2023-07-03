@@ -99,10 +99,7 @@ fun Lab5(){
         ){ backStackEntry ->
             val itemId = backStackEntry.arguments?.getInt("itemId")
             val item = dataItems.first { it.id == itemId }  // find item where the item equals itemid
-            DetailScreen(
-                navController = navController,
-                item = item
-            )
+            DetailScreen(item = item)
         }
     }
 }
@@ -124,23 +121,15 @@ fun HomeScreen(navController : NavController){
 
 // shows the details of the item selected (id, desc, and name)
 @Composable
-fun DetailScreen(
-    navController: NavController,
-    item: DataItem
-){
-    Box(
-        modifier = Modifier.clickable {
-            navController.popBackStack()
-        }) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement  =  Arrangement.Center
-        ){
-            Text(item.name)
-            Text(item.id.toString())
-            Text(item.description)
-        }
+fun DetailScreen(item: DataItem){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement  =  Arrangement.Center
+    ){
+        Text(item.name)
+        Text(item.id.toString())
+        Text(item.description)
     }
 }
 
@@ -197,10 +186,7 @@ fun HomeScreenPreview(){
 @Preview
 @Composable
 fun DetailScreenPreview(){
-    DetailScreen(
-        navController = rememberNavController(),
-        item = dataItems[0]
-    )
+    DetailScreen(item = dataItems[0])
 }
 
 
