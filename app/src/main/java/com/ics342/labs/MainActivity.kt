@@ -201,15 +201,13 @@ fun HomeScreen(navController : NavController){
     LazyColumn {
         items(dataItems) { dataItem ->
             Box(
-
+                modifier = Modifier.clickable {
+                    navController.navigate(route = Screen.Details.route)
+                }
             ) {
-                Text(
-                    text = ,
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = Screen.Details.route)
-                    }
-                )
+
                 DataItemView(dataItem)
+                //DetailScreen(navController)
             }
         }
     }
