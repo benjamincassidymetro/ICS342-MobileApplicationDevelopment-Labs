@@ -1,15 +1,18 @@
 package com.ics342.labs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -29,9 +32,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
 
@@ -60,12 +65,6 @@ private val dataItems = listOf(
 )
 
 
-sealed class Screen(val route: String){
-    object Home: Screen(route="home_screen")
-    object Details: Screen(route="details_screen")
-
-}
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,49 +75,79 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //NavExample()
-                    //DataListScreen(dataItems)
-                    MainActivityRun()
+                    Lab5()
                 }
             }
         }
     }
 }
-
-
-
-/*
 @Composable
-fun DataListScreen(items: List<DataItem>){
-    var showDialog by remember { mutableStateOf(false) }
-    var dataItem by remember { mutableStateOf<DataItem?>(null) }
-    // when selected, it focuses on the specific item and sets showDialog to true
-    DataItemList(items) { dataItem = it;
-        showDialog=true }
-    dataItem?.let{
-        // if person clicks on item,
-        if (showDialog) {
-            AlertDialog(
-                // close if user clicks outside the box
-                onDismissRequest = { showDialog = false },
-                title = { Text("${it.name}") },
-                text = { Text("${it.description}") },
-                // close if user presses disagree button
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("Disagree")
-                    }
-                },
-                // closes if user presses agree button
-                confirmButton = {
-                    Button(onClick = { showDialog = false } ) {
-                        Text("Agree")
-                    }
-                },
+fun Lab5(){
+    navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = "home_screen"
+    ){
+        composable(route = "home_screen") {
+            HomeScreen(navController = navController)
+        }
+        composable(
+            route ="details_screen/{itemId}",
+            arguments = listOf(navArgument("itemId"){
+                type = NavType.IntType
+            })
+        ){ backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt("itemId")
+            val item = dataItems.first { it.id == itemId }  // find item where the item equals itemid
+            DetailScreen(
+                navController = navController,
+                item = item
             )
         }
     }
 }
+
+@Composable
+fun HomeScreen(navController : NavController){
+    LazyColumn {
+        items(dataItems) { dataItem ->
+            Box(modifier = Modifier.clickable {
+                navController.navigate(
+                    route = "details_screen/${dataItem.id}"
+                )}
+            ) {
+                DataItemView(dataItem)
+            }
+        }
+    }
+}
+
+// shows the details of the item selected (id, desc, and name)
+@Composable
+fun DetailScreen(
+    navController: NavController,
+    item: DataItem
+){
+    Box(
+        modifier = Modifier.clickable {
+            navController.popBackStack()
+        }) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement  =  Arrangement.Center
+        ){
+            Text(item.name)
+            Text(item.id.toString())
+            Text(item.description)
+        }
+    }
+}
+
+/*
+
+@Composable
+
 */
 /*
 =================
@@ -127,7 +156,9 @@ id    name
 =================
  */
 @Composable
-fun DataItemView(dataItem: DataItem) {
+fun DataItemView(
+    dataItem: DataItem,
+) {
     Row{
         Text(
             text = dataItem.id.toString(),
@@ -152,33 +183,35 @@ fun DataItemView(dataItem: DataItem) {
     }
 }
 
-/*
-==============
-dataItemView()
---------------
-dataItemView()
---------------
-dataItemView()
-==============
- */
 
-// this code enables each item to be clickable and puts the view in each column
 
+
+
+
+
+@Preview
 @Composable
-fun DataItemList(dataItems: List<DataItem>) {
-    LazyColumn {
-        items(dataItems) { dataItem ->
-            Box(
-                modifier = Modifier.clickable {
-
-                }
-            ) {
-                DataItemView(dataItem)
-            }
-        }
-    }
+fun HomeScreenPreview(){
+    HomeScreen( navController = rememberNavController() )
+}
+@Preview
+@Composable
+fun DetailScreenPreview(){
+    DetailScreen(
+        navController = rememberNavController(),
+        item = dataItems[0]
+    )
 }
 
+
+
+@Preview
+@Composable
+fun Lab5Preview(){
+    LabsTheme {
+        Lab5()
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
@@ -187,94 +220,7 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            MainActivityRun()
+            Lab5()
         }
-    }
-}
-
-
-
-
-
-@Composable
-fun HomeScreen(navController : NavController){
-    LazyColumn {
-        items(dataItems) { dataItem ->
-            Box(
-                modifier = Modifier.clickable {
-                    navController.navigate(route = Screen.Details.route)
-                }
-            ) {
-
-                DataItemView(dataItem)
-                //DetailScreen(navController)
-            }
-        }
-    }
-}
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    HomeScreen(
-        navController = rememberNavController()
-    )
-}
-
-@Composable
-fun DetailScreen(
-    navController: NavController
-){
-    Box(
-        contentAlignment = Alignment.Center,
-
-    ){
-        Text(
-            text = "Hello world!",
-            modifier = Modifier.clickable {
-                navController.navigate(
-                    route = Screen.Home.route
-                )
-            })
-
-    }
-}
-
-@Preview
-@Composable
-fun DetailScreenPreview(){
-    DetailScreen(
-        navController = rememberNavController()
-    )
-}
-
-@Composable
-fun Setup(navController: NavHostController){
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Home.route
-    ){
-        composable(
-            route = Screen.Home.route
-        ){
-            HomeScreen(navController = navController)
-        }
-        composable(
-            route = Screen.Details.route,
-        ){
-            DetailScreen(navController = navController)
-        }
-    }
-}
-
-@Composable
-fun MainActivityRun(){
-    navController = rememberNavController()
-    Setup(navController = navController)
-}
-@Preview
-@Composable
-fun MainActivityRunPreview(){
-    LabsTheme {
-        MainActivityRun()
     }
 }
