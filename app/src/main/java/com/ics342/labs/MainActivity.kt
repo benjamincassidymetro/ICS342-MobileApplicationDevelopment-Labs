@@ -20,19 +20,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
 
-
+lateinit var navController: NavHostController
 private val dataItems = listOf(
     DataItem(1, "Item 1", "Description 1"),
     DataItem(2, "Item 2", "Description 2"),
@@ -56,6 +59,13 @@ private val dataItems = listOf(
     DataItem(20, "Item 20", "Description 20"),
 )
 
+
+sealed class Screen(val route: String){
+    object Home: Screen(route="home_screen")
+    object Details: Screen(route="details_screen")
+
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +77,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //NavExample()
-                    DataListScreen(dataItems)
+                    //DataListScreen(dataItems)
+                    MainActivityRun()
                 }
             }
         }
@@ -75,18 +86,8 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun NavExample(){
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "DataItemMenu") {
-        this.composable("DataItemMenu") {
-            DataItemList(dataItems, navController)
-        }
-        composable("DataItemInfo") {
-        }
-    }
-}
 
+/*
 @Composable
 fun DataListScreen(items: List<DataItem>){
     var showDialog by remember { mutableStateOf(false) }
@@ -118,7 +119,7 @@ fun DataListScreen(items: List<DataItem>){
         }
     }
 }
-
+*/
 /*
 =================
 id    name
@@ -169,7 +170,7 @@ fun DataItemList(dataItems: List<DataItem>) {
         items(dataItems) { dataItem ->
             Box(
                 modifier = Modifier.clickable {
-                    navController.navigate("DataItemInfo")
+
                 }
             ) {
                 DataItemView(dataItem)
@@ -186,9 +187,96 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            //NavExample()
-            //DataItemList(dataItems)
-            DataListScreen(dataItems)
+            MainActivityRun()
         }
+    }
+}
+
+
+
+
+
+@Composable
+fun HomeScreen(navController : NavController){
+    LazyColumn {
+        items(dataItems) { dataItem ->
+            Box(
+
+            ) {
+                Text(
+                    text = ,
+                    modifier = Modifier.clickable {
+                        navController.navigate(route = Screen.Details.route)
+                    }
+                )
+                DataItemView(dataItem)
+            }
+        }
+    }
+}
+@Preview
+@Composable
+fun HomeScreenPreview(){
+    HomeScreen(
+        navController = rememberNavController()
+    )
+}
+
+@Composable
+fun DetailScreen(
+    navController: NavController
+){
+    Box(
+        contentAlignment = Alignment.Center,
+
+    ){
+        Text(
+            text = "Hello world!",
+            modifier = Modifier.clickable {
+                navController.navigate(
+                    route = Screen.Home.route
+                )
+            })
+
+    }
+}
+
+@Preview
+@Composable
+fun DetailScreenPreview(){
+    DetailScreen(
+        navController = rememberNavController()
+    )
+}
+
+@Composable
+fun Setup(navController: NavHostController){
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route
+    ){
+        composable(
+            route = Screen.Home.route
+        ){
+            HomeScreen(navController = navController)
+        }
+        composable(
+            route = Screen.Details.route,
+        ){
+            DetailScreen(navController = navController)
+        }
+    }
+}
+
+@Composable
+fun MainActivityRun(){
+    navController = rememberNavController()
+    Setup(navController = navController)
+}
+@Preview
+@Composable
+fun MainActivityRunPreview(){
+    LabsTheme {
+        MainActivityRun()
     }
 }
