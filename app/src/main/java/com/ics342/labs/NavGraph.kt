@@ -31,7 +31,13 @@ fun SetupNavGraph(
             )
         ){
             val id = it.arguments?.getInt("id")
-            DetailsScreen(navController, dataItems, id)
+            var item: DataItem? = null
+            for(data in dataItems){
+                if(data.id == id){
+                    item = data
+                }
+            }
+            item?.let { it1 -> DetailsScreen(item = it1) }
         }
     }
 }
