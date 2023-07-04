@@ -7,8 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,6 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.ics342.labs.data.DataItem
 import com.ics342.labs.ui.theme.LabsTheme
 
@@ -48,27 +50,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val (selectedItem, setSelectedItem) = remember { mutableStateOf<DataItem?>(null) }
-            val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
-
-            if (showDialog && selectedItem != null) {
-                AlertDialog(
-                    onDismissRequest = { setShowDialog(false) },
-                    title = { Text(selectedItem!!.name) }, // Use selectedItem safely as we've already checked it's not null
-                    text = { Text(selectedItem!!.description) }, // Use selectedItem safely as we've already checked it's not null
-                    confirmButton = {
-                        Button(onClick = { setShowDialog(false) }) {
-                            Text("Okay")
-                        }
-                    }
-                )
-            }
-
             LabsTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    DataItemList(dataItems) { dataItem ->
-                        setSelectedItem(dataItem)
-                        setShowDialog(true)
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "list_screen") {
+                        composable("list_screen") {
+                            DataItemList(dataItems) { dataItem ->
+                                navController.navigate("details_screen/${dataItem.id}")
+                            }
+                        }
+                        composable("details_screen/{id}") { backStackEntry ->
+                            val dataItemId = backStackEntry.arguments?.getString("id")
+                            val dataItem = dataItems.find { it.id == dataItemId?.toInt() }
+                            if (dataItem != null) {
+                                DetailsScreen(dataItem)
+                            }
+                        }
                     }
                 }
             }
@@ -107,6 +104,19 @@ fun DataItemList(dataItems: List<DataItem>, onItemClicked: (DataItem) -> Unit) {
         items(dataItems) { dataItem ->
             DataItemView(dataItem, onItemClicked)
         }
+    }
+}
+
+@Composable
+fun DetailsScreen(dataItem: DataItem) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(text = "ID: ${dataItem.id}")
+        Text(text = "Name: ${dataItem.name}")
+        Text(text = "Description: ${dataItem.description}")
     }
 }
 
