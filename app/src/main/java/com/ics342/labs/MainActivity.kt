@@ -1,5 +1,6 @@
 package com.ics342.labs
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -49,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DataItemList()
+                    MyApp()
                 }
             }
         }
@@ -61,6 +63,7 @@ TopBarLayout()
 |     |
 |     |
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarLayout(){
     TopAppBar(
@@ -74,7 +77,6 @@ fun TopBarLayout(){
 }
 @Composable
 fun AppContentLayout(){
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,25 +112,15 @@ fun AppContentLayout(){
     }
 
 }
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataItemList() {
-    MaterialTheme(
-    ) {
-        Scaffold(
-            topBar = { TopBarLayout() },
-            content = { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .background(Color(235, 255, 255))
+fun MyApp() {
+    Scaffold(
+        topBar = { TopBarLayout() },
+        content = { AppContentLayout() }
+    )
 
-                ) {
-                    AppContentLayout()
-                }
-            }
-        )
-    }
 }
 
 
@@ -136,12 +128,10 @@ fun DataItemList() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    LabsTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            DataItemList()
-        }
+    LabsTheme(
+        darkTheme = false,
+        dynamicColor = true
+    ) {
+        MyApp()
     }
 }
