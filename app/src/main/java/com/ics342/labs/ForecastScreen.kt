@@ -1,11 +1,13 @@
 package com.ics342.labs
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -18,13 +20,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.time.LocalDate
+import java.time.Instant
 import java.time.LocalDateTime
-
+import java.util.TimeZone
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+var test_timestamp: Long = 1499070300L
+var triggerTime = LocalDateTime.ofInstant(
+    Instant.ofEpochSecond(test_timestamp),
+    TimeZone.getDefault().toZoneId()
+)
+var date:LocalDate = triggerTime.toLocalDate()
+var formatter:DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d")
+var text:String = date.format(formatter)
 @Composable
 fun ForecastScreen(){
     val forecastItems = listOf(
-        DayForecast(20,3,5, ForestTemp(12.45F,32.45F,43.45F),23.2F,23),
+        DayForecast(20, 3, 5, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
         DayForecast(10, 1, 2, ForestTemp(6.78F, 16.78F, 26.78F), 13.4F, 23),
         DayForecast(15, 2, 4, ForestTemp(9.23F, 29.23F, 39.23F), 17.8F, 23),
         DayForecast(25, 3, 6, ForestTemp(15.67F, 35.67F, 45.67F), 20.1F, 23),
@@ -39,17 +51,22 @@ fun ForecastScreen(){
         DayForecast(27, 12, 24, ForestTemp(16.45F, 36.45F, 46.45F), 22.8F, 23),
         DayForecast(13, 13, 26, ForestTemp(7.34F, 27.34F, 37.34F), 14.5F, 23),
         DayForecast(22, 14, 28, ForestTemp(13.01F, 33.01F, 43.01F), 20.2F, 23),
-        DayForecast(20, 15, 30, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),)
+        DayForecast(20, 15, 30, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
+    )
     LazyColumn{
         items(forecastItems) { forecastItem ->
             ForcastRow(forecastItem)
         }
     }
+    Log.d("args",triggerTime.toString())
+
 }
 
 @Composable
 fun ForcastRow(dayForecast: DayForecast){
     Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -63,7 +80,7 @@ fun ForcastRow(dayForecast: DayForecast){
                 contentScale = ContentScale.FillBounds,
             )
             Text(
-                text = "Jan ${dayForecast.date}",
+                text = "${dayForecast.date}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(2.dp),
                 fontSize = 10.sp
