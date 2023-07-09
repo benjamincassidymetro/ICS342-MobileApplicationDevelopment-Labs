@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Composable
 fun ForecastScreen(){
@@ -37,9 +39,7 @@ fun ForecastScreen(){
         DayForecast(27, 12, 24, ForestTemp(16.45F, 36.45F, 46.45F), 22.8F, 23),
         DayForecast(13, 13, 26, ForestTemp(7.34F, 27.34F, 37.34F), 14.5F, 23),
         DayForecast(22, 14, 28, ForestTemp(13.01F, 33.01F, 43.01F), 20.2F, 23),
-        DayForecast(20, 15, 30, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
-        DayForecast(24, 16, 32, ForestTemp(14.12F, 34.12F, 44.12F), 21.7F, 23),
-    )
+        DayForecast(20, 15, 30, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),)
     LazyColumn{
         items(forecastItems) { forecastItem ->
             ForcastRow(forecastItem)
