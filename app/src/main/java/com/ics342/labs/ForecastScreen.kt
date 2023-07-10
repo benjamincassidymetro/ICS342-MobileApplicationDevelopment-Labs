@@ -1,5 +1,6 @@
 package com.ics342.labs
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -126,6 +128,15 @@ fun ForcastRow(dayForecast: DayForecast){
          modifier = Modifier.padding(16.dp)
        )*/
     }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun Forecast() {
+    Scaffold(
+        topBar = { TopBarLayout() },
+        content = { ForecastScreen() }
+    )
 }
 @Preview
 @Composable
