@@ -1,4 +1,4 @@
-package com.ics342.labs.ui.theme
+package com.ics342.labs
 
 sealed class Screen(val route: String){
     object Home: Screen(route="main_screen")

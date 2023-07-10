@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.TimeZone
@@ -36,9 +38,9 @@ var date:LocalDate = triggerTime.toLocalDate()
 var formatter:DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d")
 var text:String = date.format(formatter)
 @Composable
-fun ForecastScreen(){
+fun DetailsScreen(navController: NavController){
     val forecastItems = listOf(
-        DayForecast(20, 3, 5, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
+        DayForecast(text, 3, 5, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
         DayForecast(10, 1, 2, ForestTemp(6.78F, 16.78F, 26.78F), 13.4F, 23),
         DayForecast(15, 2, 4, ForestTemp(9.23F, 29.23F, 39.23F), 17.8F, 23),
         DayForecast(25, 3, 6, ForestTemp(15.67F, 35.67F, 45.67F), 20.1F, 23),
@@ -55,91 +57,70 @@ fun ForecastScreen(){
         DayForecast(22, 14, 28, ForestTemp(13.01F, 33.01F, 43.01F), 20.2F, 23),
         DayForecast(20, 15, 30, ForestTemp(12.45F, 32.45F, 43.45F), 23.2F, 23),
     )
-    LazyColumn{
+    LazyColumn {
         items(forecastItems) { forecastItem ->
-            ForcastRow(forecastItem)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(2.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.sunshine),
+                        contentDescription = "My Image",
+                        alignment = Alignment.Center,
+                        contentScale = ContentScale.FillBounds,
+                    )
+                    Text(
+                        text = "${forecastItem.date}",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(2.dp),
+                        fontSize = 10.sp
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Temp: ${forecastItem.temp.day}",
+                        fontSize = 7.sp
+                    )
+                    Row() {
+                        Text(
+                            text = "High: ${forecastItem.temp.max}",
+                            fontSize = 7.sp
+                        )
+                        Text(
+                            text = "Low: ${forecastItem.temp.min}",
+                            fontSize = 7.sp
+                        )
+                    }
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Sunrise: ${forecastItem.sunrise}",
+                        fontSize = 7.sp
+                    )
+                    Text(
+                        text = "Sunset: ${forecastItem.sunset}",
+                        fontSize = 7.sp
+                    )
+                }
+            }
         }
     }
-    Log.d("args",triggerTime.toString())
-
-}
-
-@Composable
-fun ForcastRow(dayForecast: DayForecast){
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(2.dp)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.sunshine),
-                contentDescription = "My Image",
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillBounds,
-            )
-            Text(
-                text = "${dayForecast.date}",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(2.dp),
-                fontSize = 10.sp
-            )
-        }
-       Column(
-           verticalArrangement = Arrangement.Center
-           ) {
-           Text(
-               text = "Temp: ${dayForecast.temp.day}",
-               fontSize = 7.sp
-           )
-           Row() {
-               Text(
-                   text = "High: ${dayForecast.temp.max}",
-                   fontSize = 7.sp
-               )
-               Text(
-                   text = "Low: ${dayForecast.temp.min}",
-                   fontSize = 7.sp
-               )
-           }
-       }
-       Column(
-           horizontalAlignment = Alignment.CenterHorizontally,
-           verticalArrangement = Arrangement.Center
-       ){
-           Text(
-               text = "Sunrise: ${dayForecast.sunrise}",
-               fontSize =7.sp
-           )
-           Text(
-               text = "Sunset: ${dayForecast.sunset}",
-               fontSize = 7.sp
-           )
-       }/*
-       Text(
-         text = "${dayForecast.date}, " +
-                "${dayForecast.humidity}, " +
-                "${dayForecast.pressure}, " +
-                "${dayForecast.sunrise}, " +
-                "${dayForecast.sunset} ",
-         modifier = Modifier.padding(16.dp)
-       )*/
+    Button(onClick = { navController.navigate(Screen.Home.route) }) {
+        Text("Go to Details Screen")
     }
+    Log.d("triggerTime: ", triggerTime.toString())
+    Log.d("date formatted: ", text)
+    Log.d("date :",date.toString())
+
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun Forecast() {
-    Scaffold(
-        topBar = { TopBarLayout() },
-        content = { ForecastScreen() }
-    )
-}
-@Preview
-@Composable
-fun PreviewForecastScreen() {
-    ForecastScreen()
-}
