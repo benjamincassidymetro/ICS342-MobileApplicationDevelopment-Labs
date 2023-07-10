@@ -23,6 +23,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.util.TimeZone
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
@@ -37,10 +38,10 @@ fun DetailsScreen(navController: NavController){
         val randTempLow = randTemp - Random.Default.nextFloat() * (100 - randTemp)
         val randPressure = Random.Default.nextFloat()*100
         val randHumidity = Random.Default.nextInt(0,100)
-        val randSunrise =Random.Default.nextInt(0,100)
+        val randSunrise = Random.Default.nextLong(5,9)
         val dayForecast = DayForecast(
             date = timestamp,
-            sunrise = 3,
+            sunrise = randSunrise,
             sunset = 5,
             ForestTemp(
                 day = randTemp,
@@ -108,7 +109,7 @@ fun ForecastItemRow(dayForecast: DayForecast){
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Sunrise: ${dayForecast.sunrise}",
+                text = "Sunrise: ${ LocalTime.o}",
                 fontSize = 7.sp
             )
             Text(
