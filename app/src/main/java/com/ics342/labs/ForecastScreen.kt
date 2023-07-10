@@ -39,10 +39,11 @@ fun DetailsScreen(navController: NavController){
         val randPressure = Random.Default.nextFloat()*100
         val randHumidity = Random.Default.nextInt(0,100)
         val randSunrise = Random.Default.nextLong(5,9)
+        val randSunset = Random.Default.nextLong(4,8)
         val dayForecast = DayForecast(
             date = timestamp,
             sunrise = randSunrise,
-            sunset = 5,
+            sunset = randSunset,
             ForestTemp(
                 day = randTemp,
                 min = randTempLow,
@@ -109,11 +110,11 @@ fun ForecastItemRow(dayForecast: DayForecast){
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Sunrise: ${ LocalTime.o}",
+                text = "Sunrise: ${ LocalTime.of(Random.Default.nextInt(5,7+1), Random.Default.nextInt(0,59+1))} a.m",
                 fontSize = 7.sp
             )
             Text(
-                text = "Sunset: ${dayForecast.sunset}",
+                text = "Sunset: ${LocalTime.of(Random.Default.nextInt(4,8+1), Random.Default.nextInt(0,59+1))} p.m",
                 fontSize = 7.sp
             )
         }
