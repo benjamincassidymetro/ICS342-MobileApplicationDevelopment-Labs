@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../HTML Personal Site"
+		},
+		{
+			"path": "../../../../Downloads/Bacon Fansite Start Here"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"PA2.C": "cpp",
+			"PA2 Correct file.C": "cpp",
+			"PA2 Correct file (1).C": "cpp"
+		}
+	}
+}
