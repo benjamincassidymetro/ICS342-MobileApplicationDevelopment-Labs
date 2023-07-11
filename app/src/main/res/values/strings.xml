@@ -1,9 +1,12 @@
 <resources>
-    <string name="app_name">Labs</string>
-    <string name="button_text">Show text</string>
-    <string name="entered_text">Entered text</string>
-    <string name="okay">Okay</string>
-    <string name="error_title">Error</string>
-    <string name="error_message">Enter some text in the text field.</string>
-    <string name="hint_text">Enter some text</string>
+    <string name="app_name">My Weather App</string>
+    <string name="city_name">St. Paul, MN</string>
+    <string name="weather_description">Feels like 78°</string>
+    <string name="temperature">72°</string>
+    <string name="weather_icon">Weather Icon</string>
+    <string name="feels_like">Feels like 78°</string>
+    <string name="low">Low 65°</string>
+    <string name="high">High 80°</string>
+    <string name="humidity">Humidity 100%</string>
+    <string name="pressure">Pressure 1023 hPa</string>
 </resources>
